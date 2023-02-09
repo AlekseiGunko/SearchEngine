@@ -11,10 +11,11 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class Site {
+@Table(name = "site")
+public class Sites {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private int id;
 

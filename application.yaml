@@ -22,3 +22,7 @@ indexing-settings:
       name: Skillbox
     - url: https://www.playback.ru
       name: PlayBack.Ru
+
+connection-setting:
+  userAgent: Mozilla/5.0 (X11; Fedora;Linux x86; rv:60.0) Gecko/20100101 Firefox/60.0
+  referer: https://www.google.com
