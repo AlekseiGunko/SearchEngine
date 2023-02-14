@@ -1,7 +1,9 @@
 package searchengine.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import searchengine.model.IndexEntity;
 
-public interface IndexRepository  extends CrudRepository<IndexEntity, Integer> {
+@Repository
+public interface IndexRepository  extends JpaRepository<IndexEntity, Integer> {
 }
