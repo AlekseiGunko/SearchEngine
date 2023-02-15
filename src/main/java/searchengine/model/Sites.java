@@ -23,10 +23,10 @@ public class Sites {
     private int id;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "ENUM ('INDEXING', 'INDEXED', 'FAILED')")
+    @Column(columnDefinition = "ENUM ('INDEXING', 'INDEXED', 'FAILED')", nullable = false)
     private StatusType status;
 
-    @Column(name = "status_time")
+    @Column(name = "status_time", nullable = false)
     private LocalDateTime statusTime;
 
     @Column(name = "last_error", columnDefinition = "TEXT")

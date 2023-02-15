@@ -11,18 +11,26 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
 
 
 indexing-settings:
   sites:
-    - url: https://www.lenta.ru
-      name: Лента.ру
-    - url: https://www.skillbox.ru
-      name: Skillbox
-    - url: https://www.playback.ru
-      name: PlayBack.Ru
+    - url: https://www.svetlovka.ru/
+      name: svetlovka.ru
+    - url: http://www.playback.ru/
+      name: playback.ru
+    - url: https://dimonvideo.ru/
+      name: dimonvideo.ru
+    - url: https://dombulgakova.ru/
+      name: dom.ru
+    - url: https://qiwi.com/
+      name: qiwi.ru
+    - url: https://lenta.com/
+      name: lenta.ru
+
+
 
 connection-setting:
   userAgent: Mozilla/5.0 (X11; Fedora;Linux x86; rv:60.0) Gecko/20100101 Firefox/60.0

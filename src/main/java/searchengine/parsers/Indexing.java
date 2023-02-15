@@ -34,7 +34,7 @@ public class Indexing implements IndexParser{
         indexDataList = new ArrayList<>();
 
         for (Page page : pageList) {
-            if (page.getCode() > 400) {
+            if (page.getCode() < 400) {
                 int pageId = page.getId();
                 String content = page.getContent();
                 String title = ClearHTML.clearCode(content, "title");

@@ -33,7 +33,7 @@ public class Lemma implements Serializable {
     private int frequency;
 
     @OneToMany(mappedBy = "lemmaId", cascade = CascadeType.ALL)
-    private List<IndexEntity> index = new ArrayList<>();
+    private List<ListIndex> index = new ArrayList<>();
 
 
     public Lemma(Sites sitesId, String lemma, int frequency) {

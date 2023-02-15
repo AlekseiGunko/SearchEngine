@@ -14,7 +14,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
-@Table(name = "page", indexes = {@Index(name = "path_list" ,columnList = "path")})
+@Table(name = "page", indexes = {@Index(columnList = "path")})
 @NoArgsConstructor
 public class Page implements Serializable {
 
@@ -33,11 +33,11 @@ public class Page implements Serializable {
     @Column(nullable = false)
     private int code;
 
-    @Column(nullable = false, columnDefinition = "MEDIUMTEXT")
+    @Column(nullable = false, columnDefinition = "MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci")
     private String content;
 
     @OneToMany(mappedBy = "pageId", cascade = CascadeType.ALL)
-    private List<IndexEntity> index = new ArrayList<>();
+    private List<ListIndex> index = new ArrayList<>();
 
     public Page(Sites siteId, String path, int code, String content) {
         this.siteId = siteId;

@@ -12,8 +12,8 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "search_word")
-public class IndexEntity implements Serializable {
+@Table(name = "words_index")
+public class ListIndex implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,10 +28,10 @@ public class IndexEntity implements Serializable {
     @JoinColumn(name = "lemma_id", referencedColumnName = "id", nullable = false)
     private Lemma lemmaId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "index_rank")
     private Float rank;
 
-    public IndexEntity(Page pageId, Lemma lemmaId, Float rank) {
+    public ListIndex(Page pageId, Lemma lemmaId, Float rank) {
         this.pageId = pageId;
         this.lemmaId = lemmaId;
         this.rank = rank;
@@ -41,7 +41,7 @@ public class IndexEntity implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IndexEntity indexes = (IndexEntity) o;
+        ListIndex indexes = (ListIndex) o;
         return id == indexes.id && Objects.equals(pageId, indexes.pageId) &&
                 Objects.equals(lemmaId, indexes.lemmaId) && Objects.equals(rank, indexes.rank);
     }
