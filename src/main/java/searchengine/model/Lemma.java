@@ -13,7 +13,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
-@Table(name = "lemma")
+@Table(name = "lemma", indexes = {@Index(name = "lemma_list", columnList = "lemma")})
 @NoArgsConstructor
 public class Lemma implements Serializable {
 

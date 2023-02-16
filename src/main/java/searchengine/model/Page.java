@@ -14,7 +14,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
-@Table(name = "page", indexes = {@Index(columnList = "path")})
+@Table(name = "page", indexes = {@Index(name = "path_list", columnList = "path")})
 @NoArgsConstructor
 public class Page implements Serializable {
 

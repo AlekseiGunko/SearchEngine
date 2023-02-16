@@ -4,12 +4,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import searchengine.dto.statistics.SearchData;
 import searchengine.dto.statistics.StatisticsResponse;
 import searchengine.dto.statistics.response.FalseResponse;
+import searchengine.dto.statistics.response.SearchResponse;
 import searchengine.dto.statistics.response.TrueResponse;
 import searchengine.repository.SiteRepository;
 import searchengine.services.IndexingService;
+import searchengine.services.SearchService;
 import searchengine.services.StatisticsService;
+
+import java.util.List;
 
 
 @RestController
@@ -20,13 +25,15 @@ public class ApiController {
     private final StatisticsService statisticsService;
     private final IndexingService indexingService;
     private final SiteRepository siteRepository;
+    private final SearchService searchService;
 
 
     public ApiController(StatisticsService statisticsService, IndexingService indexingService,
-                         SiteRepository siteRepository) {
+                         SiteRepository siteRepository, SearchService searchService) {
         this.statisticsService = statisticsService;
         this.indexingService = indexingService;
         this.siteRepository = siteRepository;
+        this.searchService = searchService;
 
     }
 
@@ -52,7 +59,7 @@ public class ApiController {
         }
     }
 
-    @PostMapping("indexPage")
+    @PostMapping("/indexPage")
     public ResponseEntity<Object> indexPage(@RequestParam(name = "url") String url) {
 
         if (url.isEmpty()) {
@@ -67,6 +74,36 @@ public class ApiController {
                     HttpStatus.BAD_REQUEST);
 
 
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Object> search (@RequestParam(name = "query", required = false, defaultValue = "")
+                                          String query,
+                                          @RequestParam(name = "site", required = false, defaultValue = "")
+                                          String site,
+                                          @RequestParam(name = "offset", required = false, defaultValue = "0")
+                                          int offset,
+                                          @RequestParam(name = "limit", required = false, defaultValue = "30")
+                                          int limit) {
+        if (query.isEmpty()) {
+            log.info("Задан пустой поисковой запрос");
+            return new ResponseEntity<>(new FalseResponse(false, "Задан пустой поисковый запрос"),
+                    HttpStatus.BAD_REQUEST);
+        } else {
+            List<SearchData> searchData;
+            if (!site.isEmpty()) {
+                if (siteRepository.findByUrl(site) == null) {
+                    return new ResponseEntity<>(new FalseResponse(false, "Указанная страница не найдена"),
+                            HttpStatus.BAD_REQUEST);
+                } else {
+                    searchData = searchService.siteSearch(query, site, offset, limit);
+                }
+            } else {
+                searchData = searchService.allSiteSearch(query, offset, limit);
+            }
+            return new ResponseEntity<>(new SearchResponse(true, searchData.size(),
+                    searchData), HttpStatus.OK);
+        }
     }
 
 

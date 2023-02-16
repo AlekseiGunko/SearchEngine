@@ -11,7 +11,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
 
 
@@ -21,8 +21,6 @@ indexing-settings:
       name: svetlovka.ru
     - url: http://www.playback.ru/
       name: playback.ru
-    - url: https://dimonvideo.ru/
-      name: dimonvideo.ru
     - url: https://dombulgakova.ru/
       name: dom.ru
     - url: https://qiwi.com/
@@ -30,8 +28,3 @@ indexing-settings:
     - url: https://lenta.com/
       name: lenta.ru
 
-
-
-connection-setting:
-  userAgent: Mozilla/5.0 (X11; Fedora;Linux x86; rv:60.0) Gecko/20100101 Firefox/60.0
-  referer: https://www.google.com

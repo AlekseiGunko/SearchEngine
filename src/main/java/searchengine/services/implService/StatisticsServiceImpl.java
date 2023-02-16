@@ -2,64 +2,65 @@ package searchengine.services.implService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import searchengine.config.Site;
-import searchengine.config.SitesList;
 import searchengine.dto.statistics.DetailedStatisticsItem;
 import searchengine.dto.statistics.StatisticsData;
 import searchengine.dto.statistics.StatisticsResponse;
 import searchengine.dto.statistics.TotalStatistics;
+import searchengine.model.Sites;
+import searchengine.model.StatusType;
+import searchengine.repository.LemmaRepository;
+import searchengine.repository.PageRepository;
+import searchengine.repository.SiteRepository;
 import searchengine.services.StatisticsService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class StatisticsServiceImpl implements StatisticsService {
 
-    private final Random random = new Random();
-    private final SitesList sites;
+    private final PageRepository pageRepository;
+    private final LemmaRepository lemmaRepository;
+    private final SiteRepository siteRepository;
+
+
+    private TotalStatistics getTotalInfo () {
+        Long sites = siteRepository.count();
+        Long pages = pageRepository.count();
+        Long lemma = lemmaRepository.count();
+        return new TotalStatistics(sites, pages, lemma, true);
+    }
+
+    private DetailedStatisticsItem getDetailed (Sites site) {
+        String url = site.getUrl();
+        String name = site.getName();
+        StatusType statusType = site.getStatus();
+        LocalDateTime statusTime = site.getStatusTime();
+        String error = site.getLastError();
+        int pages = pageRepository.countBySiteId(site);
+        int lemmas = lemmaRepository.countBySitesId(site);
+        return new DetailedStatisticsItem(url, name, statusType, statusTime, error, pages, lemmas);
+    }
+
+    private List<DetailedStatisticsItem> getListDet () {
+        List<Sites> sitesList = siteRepository.findAll();
+        List<DetailedStatisticsItem> itemList = new ArrayList<>();
+        for (Sites site : sitesList) {
+            DetailedStatisticsItem item = getDetailed(site);
+            itemList.add(item);
+        }
+        return itemList;
+    }
+
 
     @Override
     public StatisticsResponse getStatistics() {
-        String[] statuses = { "INDEXED", "FAILED", "INDEXING" };
-        String[] errors = {
-                "Ошибка индексации: главная страница сайта не доступна",
-                "Ошибка индексации: сайт не доступен",
-                ""
-        };
 
-        TotalStatistics total = new TotalStatistics();
-        total.setSites(sites.getSites().size());
-        total.setIndexing(true);
+        TotalStatistics totalStatistics = getTotalInfo();
+        List<DetailedStatisticsItem> itemList = getListDet();
 
-        List<DetailedStatisticsItem> detailed = new ArrayList<>();
-        List<Site> sitesList = sites.getSites();
-        for(int i = 0; i < sitesList.size(); i++) {
-            Site site = sitesList.get(i);
-            DetailedStatisticsItem item = new DetailedStatisticsItem();
-            item.setName(site.getName());
-            item.setUrl(site.getUrl());
-            int pages = random.nextInt(1_000);
-            int lemmas = pages * random.nextInt(1_000);
-            item.setPages(pages);
-            item.setLemmas(lemmas);
-            item.setStatus(statuses[i % 3]);
-            item.setError(errors[i % 3]);
-            item.setStatusTime(System.currentTimeMillis() -
-                    (random.nextInt(10_000)));
-            total.setPages(total.getPages() + pages);
-            total.setLemmas(total.getLemmas() + lemmas);
-            detailed.add(item);
-        }
-
-        StatisticsResponse response = new StatisticsResponse();
-        StatisticsData data = new StatisticsData();
-        data.setTotal(total);
-        data.setDetailed(detailed);
-        response.setStatistics(data);
-        response.setResult(true);
-        return response;
+        return new StatisticsResponse(true, new StatisticsData(totalStatistics, itemList));
     }
 }

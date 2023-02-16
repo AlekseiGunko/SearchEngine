@@ -12,7 +12,8 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "words_index")
+@Table(name = "words_index", indexes = {@Index(name = "page_id_list", columnList = "page_id"),
+                                        @Index(name = "lemma_id_list", columnList = "lemma_id")})
 public class ListIndex implements Serializable {
 
     @Id
