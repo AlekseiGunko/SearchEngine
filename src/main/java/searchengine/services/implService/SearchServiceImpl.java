@@ -31,6 +31,7 @@ public class SearchServiceImpl implements SearchService {
     private final SiteRepository siteRepository;
 
 
+
     @Override
     public List<SearchData> allSiteSearch(String text, int offset, int limit) {
         log.info("Ищем: " + text);
@@ -41,6 +42,7 @@ public class SearchServiceImpl implements SearchService {
         for (Sites site : siteList) {
             lemmaList.addAll(getLemmaOnSite(textLemma, site));
         }
+
         List<SearchData> searchData = new ArrayList<>();
         for (Lemma lemma : lemmaList) {
             if (lemma.getLemma().equals(text)) {
@@ -61,8 +63,12 @@ public class SearchServiceImpl implements SearchService {
             }
         }
         log.info("Ответ получен");
-        for (SearchData ser : searchData)
-            log.info(ser.toString());
+
+        List<SearchData> res = new ArrayList<>();
+        for (SearchData ser : searchData) {
+            res.add(ser);
+            log.info(res.toString());
+        }
 
         return searchData;
     }
@@ -74,6 +80,7 @@ public class SearchServiceImpl implements SearchService {
         List<String> textLemmas = getLemmaOnSiteSearch(searchText);
         List<Lemma> lemmaList = getLemmaOnSite(textLemmas, site);
         log.info("Ответ получен");
+        log.info(searchDataList(lemmaList, textLemmas, offset, limit).toString());
 
         return searchDataList(lemmaList, textLemmas, offset, limit);
     }
