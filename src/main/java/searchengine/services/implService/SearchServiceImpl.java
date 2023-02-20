@@ -64,11 +64,9 @@ public class SearchServiceImpl implements SearchService {
         }
         log.info("Ответ получен");
 
-        List<SearchData> res = new ArrayList<>();
-        for (SearchData ser : searchData) {
-            res.add(ser);
-            log.info(res.toString());
-        }
+        for (SearchData ser : searchData)
+            log.info(ser.toString());
+
 
         return searchData;
     }
