@@ -2,18 +2,19 @@ package searchengine.dto.statistics;
 
 import lombok.Data;
 import lombok.Value;
-import searchengine.model.StatusType;
+import searchengine.model.LemmaEntity;
+import searchengine.model.PageEntity;
+import searchengine.model.Status;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Value
-@Data
 public class DetailedStatisticsItem {
     String url;
     String name;
-    StatusType status;
-    LocalDateTime statusTime;
+    Status status;
+    Date statusTime;
     String error;
-    int pages;
-    int lemmas;
+    long pages;
+    long lemmas;
 }

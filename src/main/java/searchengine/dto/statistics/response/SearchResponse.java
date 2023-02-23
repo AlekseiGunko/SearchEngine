@@ -1,30 +1,25 @@
 package searchengine.dto.statistics.response;
 
-
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import searchengine.dto.statistics.SearchData;
+import searchengine.dto.statistics.SearchDto;
 
 import java.util.List;
 
-@Getter
 @Setter
-@Data
+@Getter
 public class SearchResponse {
     private boolean result;
     private int count;
-    private List<SearchData> searchData;
+    private List<SearchDto> data;
 
-    public SearchResponse(boolean result) {
+   public SearchResponse(boolean result){
         this.result = result;
     }
 
-    public SearchResponse(boolean result, int count, List<SearchData> searchData) {
+    public SearchResponse(boolean result, int count, List<SearchDto> data) {
         this.result = result;
         this.count = count;
-        this.searchData = searchData;
+        this.data = data;
     }
 }
-
-

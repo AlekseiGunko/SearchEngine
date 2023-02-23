@@ -1,11 +1,12 @@
 package searchengine.dto.statistics.response;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.Value;
 
 @Value
-@Data
-public class FalseResponse {
+public class FalseResponse  {
     boolean result;
     String error;
+
 }

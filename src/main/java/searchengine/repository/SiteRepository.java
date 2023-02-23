@@ -1,15 +1,14 @@
 package searchengine.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import searchengine.model.Sites;
-
-
+import searchengine.config.Site;
+import searchengine.model.SiteEntity;
 @Repository
-public interface SiteRepository extends JpaRepository<Sites, Integer> {
-
-    Sites findByUrl(String url);
-    Sites findByUrl(int id);
-    Sites findByUrl(Sites site);
+public interface SiteRepository extends JpaRepository<SiteEntity, Integer> {
+    SiteEntity findByUrl(String url);
+    SiteEntity findByUrl(long id);
+    SiteEntity findByUrl(SiteEntity site);
 
 }

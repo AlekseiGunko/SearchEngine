@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import searchengine.dto.statistics.SearchData;
+import searchengine.dto.statistics.SearchDto;
 import searchengine.dto.statistics.StatisticsResponse;
 import searchengine.dto.statistics.response.FalseResponse;
 import searchengine.dto.statistics.response.SearchResponse;
@@ -16,7 +16,6 @@ import searchengine.services.StatisticsService;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api")
 @Slf4j
@@ -27,26 +26,28 @@ public class ApiController {
     private final SiteRepository siteRepository;
     private final SearchService searchService;
 
-
     public ApiController(StatisticsService statisticsService, IndexingService indexingService,
                          SiteRepository siteRepository, SearchService searchService) {
+
         this.statisticsService = statisticsService;
         this.indexingService = indexingService;
         this.siteRepository = siteRepository;
         this.searchService = searchService;
-
     }
 
+    @GetMapping("/statistics")
+    public ResponseEntity<StatisticsResponse> statistics() {
+        return ResponseEntity.ok(statisticsService.getStatistics());
+    }
 
     @GetMapping("/startIndexing")
     public ResponseEntity<Object> startIndexing() {
         if (indexingService.indexingAll()) {
             return new ResponseEntity<>(new TrueResponse(true), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new FalseResponse(false,
-                    "Индексация уже запущена"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new FalseResponse(false, "Индексация уже запущена"),
+                    HttpStatus.BAD_REQUEST);
         }
-
     }
 
     @GetMapping("/stopIndexing")
@@ -59,38 +60,20 @@ public class ApiController {
         }
     }
 
-    @PostMapping("/indexPage")
-    public ResponseEntity<Object> indexPage(@RequestParam(name = "url") String url) {
-
-        if (url.isEmpty()) {
-            log.info("Страница не указана");
-        } else if (indexingService.urlIndexing(url)) {
-            return new ResponseEntity<>(new TrueResponse(true), HttpStatus.OK);
-
-        }
-            log.info("Данная страница находится за пределами сайтов, указанных в конфигурационном файле");
-            return new ResponseEntity<>(new FalseResponse(false,
-                    "Данная страница находится за пределами сайтов, указанных в конфигурационном файле"),
-                    HttpStatus.BAD_REQUEST);
-
-
-    }
-
     @GetMapping("/search")
-    public ResponseEntity<Object> search (@RequestParam(name = "query", required = false, defaultValue = "")
-                                          String query,
-                                          @RequestParam(name = "site", required = false, defaultValue = "")
-                                          String site,
-                                          @RequestParam(name = "offset", required = false, defaultValue = "0")
-                                          int offset,
-                                          @RequestParam(name = "limit", required = false, defaultValue = "20")
-                                          int limit) {
+    public ResponseEntity<Object> search(@RequestParam(name = "query", required = false, defaultValue = "")
+                                         String query,
+                                         @RequestParam(name = "site", required = false, defaultValue = "")
+                                         String site,
+                                         @RequestParam(name = "offset", required = false, defaultValue = "0")
+                                         int offset,
+                                         @RequestParam(name = "limit", required = false, defaultValue = "20")
+                                         int limit) {
         if (query.isEmpty()) {
-            log.info("Задан пустой поисковой запрос");
             return new ResponseEntity<>(new FalseResponse(false, "Задан пустой поисковый запрос"),
                     HttpStatus.BAD_REQUEST);
         } else {
-            List<SearchData> searchData;
+            List<SearchDto> searchData;
             if (!site.isEmpty()) {
                 if (siteRepository.findByUrl(site) == null) {
                     return new ResponseEntity<>(new FalseResponse(false, "Указанная страница не найдена"),
@@ -101,14 +84,29 @@ public class ApiController {
             } else {
                 searchData = searchService.allSiteSearch(query, offset, limit);
             }
-            return new ResponseEntity<>(new SearchResponse(true, searchData.size(),
-                    searchData), HttpStatus.OK);
+
+            return new ResponseEntity<>(new SearchResponse(true, searchData.size(), searchData), HttpStatus.OK);
         }
     }
 
+    @PostMapping("/indexPage")
 
-    @GetMapping("/statistics")
-    public ResponseEntity<StatisticsResponse> statistics() {
-        return ResponseEntity.ok(statisticsService.getStatistics());
+    public ResponseEntity<Object> indexPage(@RequestParam(name = "url") String url) {
+        if (url.isEmpty()) {
+            log.info("Страница не указана");
+            return new ResponseEntity<>(new FalseResponse(false, "Страница не указана"),
+                    HttpStatus.BAD_REQUEST);
+        } else {
+            if (indexingService.urlIndexing(url) == true) {
+                log.info("Страница - " + url + " - добавлена на переиндексацию");
+                return new ResponseEntity<>(new TrueResponse(true), HttpStatus.OK);
+            } else {
+                log.info("Указанная страница" + "за пределами конфигурационного файла");
+                return new ResponseEntity<>(new FalseResponse(false,
+                        "Данная страница находится за пределами сайтов, указанных в конфигурационном файле"),
+                        HttpStatus.BAD_REQUEST);
+            }
+        }
     }
 }
+

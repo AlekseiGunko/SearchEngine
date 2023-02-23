@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface Morphology {
-
-    HashMap<String, Integer> lemmasList(String content);
-    List<String> lemmas (String word);
-    List<Integer> indexLemmaInText(String content, String lemma);
-
+    HashMap<String, Integer> getLemmaList(String content);
+    List<String> getLemma(String word);
+    List<Integer> findLemmaIndexInText(String content, String lemma);
 }
