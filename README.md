@@ -1,5 +1,7 @@
 # [SearchEngine](https://github.com/AlekseiGunko/SearchEngine) - поисковой локальный движок
 ![javaLang](https://img.shields.io/badge/Language-Java-blue)
+![typeProj](https://img.shields.io/badge/TypeProject-Skillbox-yellow)
+![status](https://img.shields.io/badge/Status-Completed-green)
 _____
 ## Для чего предназначен: 
 В первую очередь поисковой движок предназначен для словесного поиска по сайтам, указанным в [конфигурационном файле](https://github.com/AlekseiGunko/SearchEngine/blob/master/application.yaml) в корне проекта.
