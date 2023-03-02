@@ -17,14 +17,11 @@ spring:
 
 indexing-settings:
   sites:
-    - url: https://www.svetlovka.ru/
-      name: svetlovka.ru
-    - url: http://www.playback.ru/
-      name: playback.ru
-    - url: https://dombulgakova.ru/
-      name: dom.ru
-    - url: https://qiwi.com/
-      name: qiwi.ru
-    - url: https://lenta.com/
-      name: lenta.ru
+    - url: https://nikoartgallery.com
+      name: nikoartgallery.com
+    - url: https://www.lutherancathedral.ru
+      name: lutherancathedral.ru
+    - url: https://dombulgakova.ru
+      name: dombulgakova.ru
+
 

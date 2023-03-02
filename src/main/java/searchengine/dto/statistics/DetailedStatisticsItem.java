@@ -1,9 +1,5 @@
 package searchengine.dto.statistics;
-
-import lombok.Data;
 import lombok.Value;
-import searchengine.model.LemmaEntity;
-import searchengine.model.PageEntity;
 import searchengine.model.Status;
 
 import java.util.Date;

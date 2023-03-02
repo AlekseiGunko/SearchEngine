@@ -3,7 +3,6 @@ package searchengine.dto.statistics;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Value;
 
 @Setter
 @Getter

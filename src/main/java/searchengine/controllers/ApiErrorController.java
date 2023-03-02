@@ -11,7 +11,7 @@ public class ApiErrorController {
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<ErrorMessage> nullPointerException(NullPointerException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorMessage("Данные поискового запроса" + " отсутствуют в базе сервера: "
+                .body(new ErrorMessage("Данные поискового запроса отсутствуют в базе сервера: "
                         + exception.getMessage()));
     }
 
