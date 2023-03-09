@@ -67,7 +67,7 @@ public class ApiController {
                                          String site,
                                          @RequestParam(name = "offset", required = false, defaultValue = "0")
                                          int offset,
-                                         @RequestParam(name = "limit", required = false, defaultValue = "20")
+                                         @RequestParam(name = "limit", required = false, defaultValue = "0")
                                          int limit) {
         if (query.isEmpty()) {
             return new ResponseEntity<>(new FalseResponse(false, "Задан пустой поисковый запрос"),

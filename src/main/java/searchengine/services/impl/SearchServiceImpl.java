@@ -33,23 +33,16 @@ public class SearchServiceImpl implements SearchService {
     public List<SearchDto> allSiteSearch(String searchText, int offset, int limit) {
         log.info("Получаем информацию по поиску \"" + searchText + "\"");
         List<SiteEntity> siteList = siteRepository.findAll();
-        List<SearchDto> result = new ArrayList<>();
         List<LemmaEntity> foundLemmaList = new ArrayList<>();
         List<String> textLemmaList = getLemmaFromSearchText(searchText);
         for (SiteEntity site : siteList) {
             foundLemmaList.addAll(getLemmaListFromSite(textLemmaList, site));
         }
-        List<SearchDto> searchData = null;
+        List<SearchDto> searchData = new ArrayList<>();
         for (LemmaEntity l : foundLemmaList) {
             if (l.getLemma().equals(searchText)) {
                 searchData = new ArrayList<>(getSearchDtoList(foundLemmaList, textLemmaList, offset, limit));
                 searchData.sort((o1, o2) -> Float.compare(o2.getRelevance(), o1.getRelevance()));
-                if (searchData.size() > limit) {
-                    for (int i = offset; i < limit; i++) {
-                        result.add(searchData.get(i));
-                    }
-                    return result;
-                }
             } else {
                 try {
                     throw new Exception();
@@ -58,7 +51,7 @@ public class SearchServiceImpl implements SearchService {
                 }
             }
         }
-        log.info("Поисковый запрос обработан. Ответ получен.");
+        log.info("Поисковый запрос обработан. Ответ получен." + siteList);
         return searchData;
     }
 
@@ -73,7 +66,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private List<String> getLemmaFromSearchText(String searchText) {
-        String[] words = searchText.toLowerCase(Locale.ROOT).split(" ");
+        String[] words = searchText.split(" ");
         List<String> lemmaList = new ArrayList<>();
         for (String lemma : words) {
             List<String> list = morphology.getLemma(lemma);
